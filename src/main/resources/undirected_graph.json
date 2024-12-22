@@ -1,0 +1,19 @@
+{
+  "graphType" : "UNDIRECTED",
+  "vertices" : [ {
+    "id" : 55,
+    "label" : "X"
+  }, {
+    "id" : 56,
+    "label" : "Y"
+  } ],
+  "edges" : [ {
+    "fromId" : 55,
+    "toId" : 56,
+    "weight" : 2.0
+  }, {
+    "fromId" : 56,
+    "toId" : 55,
+    "weight" : 2.0
+  } ]
+}

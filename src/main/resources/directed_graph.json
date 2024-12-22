@@ -1,0 +1,15 @@
+{
+  "graphType" : "DIRECTED",
+  "vertices" : [ {
+    "id" : 57,
+    "label" : "A"
+  }, {
+    "id" : 58,
+    "label" : "B"
+  } ],
+  "edges" : [ {
+    "fromId" : 57,
+    "toId" : 58,
+    "weight" : 1.5
+  } ]
+}
