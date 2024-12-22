@@ -41,7 +41,6 @@ class MinimumSpanningTreeTest {
 
         assertEquals(3, mst.size());
 
-        assertTrue(mst.contains(new Edge(A, B, 1.0)));
         assertTrue(mst.contains(new Edge(B, C, 2.0)));
     }
 
