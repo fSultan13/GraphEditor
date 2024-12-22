@@ -7,9 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Диалоговое окно для удаления вершины.
- */
+
 public class DeleteVertexDialog extends JDialog {
     private JComboBox<Vertex> vertexComboBox;
     private JButton deleteButton;
@@ -20,14 +18,12 @@ public class DeleteVertexDialog extends JDialog {
         super(parent, "Удалить вершину", true);
         setLayout(new BorderLayout());
 
-        // Панель выбора вершины
         JPanel inputPanel = new JPanel(new FlowLayout());
         inputPanel.add(new JLabel("Выберите вершину для удаления:"));
         vertexComboBox = new JComboBox<>(vertices.toArray(new Vertex[0]));
         inputPanel.add(vertexComboBox);
         add(inputPanel, BorderLayout.CENTER);
 
-        // Панель кнопок
         JPanel buttonPanel = new JPanel(new FlowLayout());
         deleteButton = new JButton("Удалить");
         cancelButton = new JButton("Отмена");
@@ -35,7 +31,6 @@ public class DeleteVertexDialog extends JDialog {
         buttonPanel.add(cancelButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Обработчики кнопок
         deleteButton.addActionListener(e -> {
             selectedVertex = (Vertex) vertexComboBox.getSelectedItem();
             dispose();

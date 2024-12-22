@@ -36,6 +36,10 @@ public abstract class Graph {
         return edges;
     }
 
+    public int getSizeVertex() {
+        return vertices.size();
+    }
+
     public Set<Vertex> getVertices() {
         return vertices;
     }

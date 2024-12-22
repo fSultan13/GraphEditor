@@ -4,61 +4,58 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-/**
- * Панель инструментов с кнопками для управления графом.
- */
+
 public class ToolPanel extends JPanel {
-    private JButton backButton; // Кнопка "Назад"
+    private JButton backButton;
+    private JButton saveGraphButton;
     private JButton addVertexButton;
     private JButton addEdgeButton;
     private JButton deleteVertexButton;
     private JButton deleteEdgeButton;
-    private JButton changeEdgeWeightButton; // Кнопка "Изменить вес ребра"
-    private JButton saveGraphButton; // Кнопка "Сохранить граф"
-    private JButton runDFSButton; // Кнопка "Запустить DFS"
-    private JButton runBFSButton; // Кнопка "Запустить BFS"
-    private JButton runDijkstraButton; // Кнопка "Запустить Dijkstra"
-    private JButton runEdmondsKarpButton; // Кнопка "Запустить Edmonds-Karp"
-    private JButton runTopologicalSortButton; // Кнопка "Запустить Топологическую сортировку"
-    private JButton arrangeGraphButton; // Новая кнопка "Укладка графа"
+    private JButton changeEdgeWeightButton;
+    private JButton runDFSButton;
+    private JButton runBFSButton;
+    private JButton runDijkstraButton;
+    private JButton runEdmondsKarpButton;
+    private JButton runTopologicalSortButton;
+    private JButton arrangeGraphButton;
 
     public ToolPanel() {
-        // Используем WrapLayout вместо FlowLayout
+
         setLayout(new WrapLayout(FlowLayout.LEFT, 5, 5));
         setBackground(Color.LIGHT_GRAY);
 
-        // Инициализация кнопок
+
         backButton = new JButton("Назад");
+        saveGraphButton = new JButton("Сохранить граф");
         addVertexButton = new JButton("Добавить вершину");
         addEdgeButton = new JButton("Добавить ребро");
         deleteVertexButton = new JButton("Удалить вершину");
         deleteEdgeButton = new JButton("Удалить ребро");
         changeEdgeWeightButton = new JButton("Изменить вес ребра");
-        saveGraphButton = new JButton("Сохранить граф");
         runDFSButton = new JButton("Запустить DFS");
         runBFSButton = new JButton("Запустить BFS");
         runDijkstraButton = new JButton("Запустить Dijkstra");
         runEdmondsKarpButton = new JButton("Запустить Edmonds-Karp");
         runTopologicalSortButton = new JButton("Запустить Топологическую сортировку");
-        arrangeGraphButton = new JButton("Укладка графа"); // Инициализация новой кнопки
+        arrangeGraphButton = new JButton("Укладка графа");
 
-        // Добавление кнопок на панель
+
         add(backButton);
+        add(saveGraphButton);
         add(addVertexButton);
         add(addEdgeButton);
         add(deleteVertexButton);
         add(deleteEdgeButton);
         add(changeEdgeWeightButton);
-        add(saveGraphButton);
         add(runDFSButton);
         add(runBFSButton);
         add(runDijkstraButton);
         add(runEdmondsKarpButton);
         add(runTopologicalSortButton);
-        add(arrangeGraphButton); // Добавление новой кнопки на панель
+        add(arrangeGraphButton);
     }
 
-    // Методы для установки обработчиков событий для каждой кнопки
 
     public void setBackAction(ActionListener listener) {
         backButton.addActionListener(listener);
@@ -108,11 +105,6 @@ public class ToolPanel extends JPanel {
         runTopologicalSortButton.addActionListener(listener);
     }
 
-    /**
-     * Устанавливает обработчик события для кнопки укладки графа.
-     *
-     * @param listener Обработчик события.
-     */
     public void setArrangeGraphAction(ActionListener listener) {
         arrangeGraphButton.addActionListener(listener);
     }

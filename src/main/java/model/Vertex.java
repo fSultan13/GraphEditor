@@ -31,7 +31,7 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return label; // Возвращаем только метку для удобства отображения в ComboBox
+        return label;
     }
 
     @Override

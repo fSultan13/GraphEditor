@@ -7,9 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Диалоговое окно для добавления нового ребра.
- */
+
 public class AddEdgeDialog extends JDialog {
     private JComboBox<Vertex> fromComboBox;
     private JComboBox<Vertex> toComboBox;
@@ -22,7 +20,6 @@ public class AddEdgeDialog extends JDialog {
         super(parent, "Добавить ребро", true);
         setLayout(new BorderLayout());
 
-        // Панель выбора вершин и ввода веса
         JPanel inputPanel = new JPanel(new GridLayout(3, 2, 5, 5));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -40,7 +37,6 @@ public class AddEdgeDialog extends JDialog {
 
         add(inputPanel, BorderLayout.CENTER);
 
-        // Кнопки
         JPanel buttonPanel = new JPanel(new FlowLayout());
         addButton = new JButton("Добавить");
         cancelButton = new JButton("Отмена");
@@ -48,7 +44,6 @@ public class AddEdgeDialog extends JDialog {
         buttonPanel.add(cancelButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Обработчики кнопок
         addButton.addActionListener(e -> {
             Vertex from = (Vertex) fromComboBox.getSelectedItem();
             Vertex to = (Vertex) toComboBox.getSelectedItem();
@@ -81,11 +76,6 @@ public class AddEdgeDialog extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    /**
-     * Возвращает созданное ребро или null, если добавление отменено.
-     *
-     * @return Ребро или null.
-     */
     public Edge getEdge() {
         return edge;
     }

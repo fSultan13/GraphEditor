@@ -5,56 +5,35 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 
-public class WrapLayout extends FlowLayout
-{
+public class WrapLayout extends FlowLayout {
     private Dimension preferredLayoutSize;
 
-    /**
-     * Конструктор по умолчанию.
-     */
-    public WrapLayout()
-    {
+    public WrapLayout() {
         super();
     }
 
-    /**
-     * Конструктор с выравниванием.
-     * @param align Выравнивание.
-     */
-    public WrapLayout(int align)
-    {
+    public WrapLayout(int align) {
         super(align);
     }
 
-    /**
-     * Конструктор с выравниванием и отступами.
-     * @param align Выравнивание.
-     * @param hgap Горизонтальный отступ.
-     * @param vgap Вертикальный отступ.
-     */
-    public WrapLayout(int align, int hgap, int vgap)
-    {
+    public WrapLayout(int align, int hgap, int vgap) {
         super(align, hgap, vgap);
     }
 
     @Override
-    public Dimension preferredLayoutSize(Container target)
-    {
+    public Dimension preferredLayoutSize(Container target) {
         return layoutSize(target, true);
     }
 
     @Override
-    public Dimension minimumLayoutSize(Container target)
-    {
+    public Dimension minimumLayoutSize(Container target) {
         Dimension minimum = layoutSize(target, false);
         minimum.width -= (getHgap() + 1);
         return minimum;
     }
 
-    private Dimension layoutSize(Container target, boolean preferred)
-    {
-        synchronized (target.getTreeLock())
-        {
+    private Dimension layoutSize(Container target, boolean preferred) {
+        synchronized (target.getTreeLock()) {
             int targetWidth = target.getWidth();
 
             if (targetWidth == 0)
@@ -70,23 +49,19 @@ public class WrapLayout extends FlowLayout
 
             int nmembers = target.getComponentCount();
 
-            for (int i = 0; i < nmembers; i++)
-            {
+            for (int i = 0; i < nmembers; i++) {
                 Component m = target.getComponent(i);
 
-                if (m.isVisible())
-                {
+                if (m.isVisible()) {
                     Dimension d = preferred ? m.getPreferredSize() : m.getMinimumSize();
 
-                    if (rowWidth + d.width > maxWidth)
-                    {
+                    if (rowWidth + d.width > maxWidth) {
                         addRow(dim, rowWidth, rowHeight);
                         rowWidth = 0;
                         rowHeight = 0;
                     }
 
-                    if (rowWidth != 0)
-                    {
+                    if (rowWidth != 0) {
                         rowWidth += getHgap();
                     }
 
@@ -100,10 +75,8 @@ public class WrapLayout extends FlowLayout
             dim.width += horizontalInsetsAndGap;
             dim.height += insets.top + insets.bottom + getVgap() * 2;
 
-            // Максимальная ширина должна быть ограничена
             Container scrollPane = SwingUtilities.getAncestorOfClass(JScrollPane.class, target);
-            if (scrollPane != null)
-            {
+            if (scrollPane != null) {
                 dim.width = Math.min(dim.width, scrollPane.getWidth());
             }
 
@@ -111,12 +84,10 @@ public class WrapLayout extends FlowLayout
         }
     }
 
-    private void addRow(Dimension dim, int rowWidth, int rowHeight)
-    {
+    private void addRow(Dimension dim, int rowWidth, int rowHeight) {
         dim.width = Math.max(dim.width, rowWidth);
 
-        if (dim.height > 0)
-        {
+        if (dim.height > 0) {
             dim.height += getVgap();
         }
 

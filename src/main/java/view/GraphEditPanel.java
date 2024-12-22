@@ -15,52 +15,41 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Queue;
 import java.util.LinkedList;
-/**
- * Панель редактирования графа.
- */
+
+
 public class GraphEditPanel extends JPanel {
     private Graph graph;
 
-    private static final int VERTEX_RADIUS = 20;
+    private static final int VERTEX_RADIUS = 15;
 
     private List<Point> vertexPositions = new ArrayList<>();
 
-    // Верхняя панель инструментов
     private ToolPanel toolPanel;
 
-    // Набор посещённых вершин после выполнения алгоритма (DFS, BFS, Dijkstra, Edmonds-Karp, TopologicalSort)
     private Set<Vertex> visitedVertices;
 
-    // Расстояния от начальной вершины после выполнения алгоритма Дейкстры
     private Map<Vertex, Double> shortestDistances;
 
-    // Максимальный поток после выполнения алгоритма Эдмондса-Карпа
     private double maxFlow;
 
-    // Список вершин после выполнения топологической сортировки
     private List<Vertex> topologicalOrder;
 
-    // Тип последнего выполненного алгоритма (для возможного расширения)
     private String lastAlgorithm = "";
 
-    // Метка для отображения максимального потока
     private JLabel maxFlowLabel;
 
     public GraphEditPanel() {
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
 
-        // Инициализируем и добавляем панель инструментов
         toolPanel = new ToolPanel();
         add(toolPanel, BorderLayout.NORTH);
 
-        // Инициализируем и добавляем панель состояния
         JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         maxFlowLabel = new JLabel("Максимальный поток: 0.0");
         statusPanel.add(maxFlowLabel);
         add(statusPanel, BorderLayout.SOUTH);
 
-        // Устанавливаем обработчики действий для кнопок
         toolPanel.setBackAction(e -> backToStart());
         toolPanel.setAddVertexAction(e -> addVertex());
         toolPanel.setAddEdgeAction(e -> addEdge());
@@ -76,9 +65,6 @@ public class GraphEditPanel extends JPanel {
         toolPanel.setArrangeGraphAction(e -> arrangeGraph());
     }
 
-    /**
-     * Переход обратно на стартовую панель.
-     */
     private void backToStart() {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         if (parentFrame instanceof MainFrame) {
@@ -86,25 +72,17 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Устанавливает граф для отображения.
-     *
-     * @param graph Граф.
-     */
     public void setGraph(Graph graph) {
         this.graph = graph;
-        this.visitedVertices = null; // Сброс предыдущих результатов алгоритма
-        this.shortestDistances = null; // Сброс результатов алгоритма Дейкстры
-        this.maxFlow = 0.0; // Сброс результата алгоритма Эдмондса-Карпа
-        this.topologicalOrder = null; // Сброс результата топологической сортировки
-        maxFlowLabel.setText("Максимальный поток: 0.0"); // Сброс метки
+        this.visitedVertices = null;
+        this.shortestDistances = null;
+        this.maxFlow = 0.0;
+        this.topologicalOrder = null;
+        maxFlowLabel.setText("Максимальный поток: 0.0");
         layoutVertices();
         repaint();
     }
 
-    /**
-     * Расставляет вершины по окружности для наглядности.
-     */
     private void layoutVertices() {
         vertexPositions.clear();
         if (graph == null || graph.getVertices().isEmpty()) {
@@ -112,7 +90,7 @@ public class GraphEditPanel extends JPanel {
         }
 
         int width = getWidth();
-        int height = getHeight() - toolPanel.getHeight(); // Учёт высоты панели инструментов
+        int height = getHeight() - toolPanel.getHeight();
         int centerX = width / 2;
         int centerY = height / 2 + toolPanel.getHeight();
 
@@ -143,11 +121,7 @@ public class GraphEditPanel extends JPanel {
         drawVertices(g2);
     }
 
-    /**
-     * Отрисовка вершин.
-     *
-     * @param g2 Графический контекст.
-     */
+
     private void drawVertices(Graphics2D g2) {
         List<Vertex> vertexList = new ArrayList<>(graph.getVertices());
 
@@ -155,46 +129,45 @@ public class GraphEditPanel extends JPanel {
             Vertex v = vertexList.get(i);
             Point p = vertexPositions.get(i);
 
-            // Определение цвета вершины
+
             if (lastAlgorithm.equals("DFS") || lastAlgorithm.equals("BFS") || lastAlgorithm.equals("Dijkstra") || lastAlgorithm.equals("EdmondsKarp") || lastAlgorithm.equals("TopologicalSort") || lastAlgorithm.equals("ARRANGE")) {
                 switch (lastAlgorithm) {
                     case "DFS":
                         if (visitedVertices != null && visitedVertices.contains(v)) {
-                            g2.setColor(Color.GREEN); // DFS: зелёный
+                            g2.setColor(Color.GREEN);
                         } else {
                             g2.setColor(Color.LIGHT_GRAY);
                         }
                         break;
                     case "BFS":
                         if (visitedVertices != null && visitedVertices.contains(v)) {
-                            g2.setColor(Color.CYAN); // BFS: голубой
+                            g2.setColor(Color.CYAN);
                         } else {
                             g2.setColor(Color.LIGHT_GRAY);
                         }
                         break;
                     case "Dijkstra":
                         if (shortestDistances != null) {
-                            g2.setColor(Color.ORANGE); // Dijkstra: оранжевый
+                            g2.setColor(Color.ORANGE);
                         } else {
                             g2.setColor(Color.LIGHT_GRAY);
                         }
                         break;
                     case "EdmondsKarp":
                         if (visitedVertices != null && visitedVertices.contains(v)) {
-                            g2.setColor(Color.MAGENTA); // Edmonds-Karp: пурпурный
+                            g2.setColor(Color.MAGENTA);
                         } else {
                             g2.setColor(Color.LIGHT_GRAY);
                         }
                         break;
                     case "TopologicalSort":
                         if (topologicalOrder != null && topologicalOrder.contains(v)) {
-                            g2.setColor(Color.BLUE); // TopologicalSort: синий
+                            g2.setColor(Color.BLUE);
                         } else {
                             g2.setColor(Color.LIGHT_GRAY);
                         }
                         break;
                     case "ARRANGE":
-                        // Можно добавить цветовое выделение для различных укладок, если необходимо
                         g2.setColor(Color.LIGHT_GRAY);
                         break;
                     default:
@@ -219,7 +192,6 @@ public class GraphEditPanel extends JPanel {
                 }
             }
 
-            // Если был выполнен алгоритм топологической сортировки, отображаем номер порядка
             if (lastAlgorithm.equals("TopologicalSort") && topologicalOrder != null) {
                 int order = topologicalOrder.indexOf(v) + 1;
                 label += " [" + order + "]";
@@ -232,11 +204,6 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Отрисовка рёбер.
-     *
-     * @param g2 Графический контекст.
-     */
     private void drawEdges(Graphics2D g2) {
         if (graph.getEdges().isEmpty()) return;
 
@@ -244,7 +211,6 @@ public class GraphEditPanel extends JPanel {
         Set<Edge> mstEdges = null;
 
         if (lastAlgorithm.equals("MST")) {
-            // Получаем MST, если был выполнен алгоритм MST
             mstEdges = MinimumSpanningTree.kruskalMST(graph);
         }
 
@@ -262,33 +228,32 @@ public class GraphEditPanel extends JPanel {
             Point p1 = vertexPositions.get(fromIndex);
             Point p2 = vertexPositions.get(toIndex);
 
-            // Определение цвета ребра
             if (lastAlgorithm.equals("DFS") || lastAlgorithm.equals("BFS") || lastAlgorithm.equals("Dijkstra") || lastAlgorithm.equals("EdmondsKarp") || lastAlgorithm.equals("TopologicalSort") || lastAlgorithm.equals("ARRANGE")) {
                 switch (lastAlgorithm) {
                     case "DFS":
                         if (visitedVertices != null && visitedVertices.contains(from) && visitedVertices.contains(to)) {
-                            g2.setColor(Color.GREEN); // DFS: зелёный
+                            g2.setColor(Color.GREEN);
                         } else {
                             g2.setColor(Color.BLACK);
                         }
                         break;
                     case "BFS":
                         if (visitedVertices != null && visitedVertices.contains(from) && visitedVertices.contains(to)) {
-                            g2.setColor(Color.MAGENTA); // BFS: пурпурный
+                            g2.setColor(Color.MAGENTA);
                         } else {
                             g2.setColor(Color.BLACK);
                         }
                         break;
                     case "Dijkstra":
                         if (shortestDistances != null && visitedVertices != null && visitedVertices.contains(from) && visitedVertices.contains(to)) {
-                            g2.setColor(Color.RED); // Dijkstra: красный
+                            g2.setColor(Color.RED);
                         } else {
                             g2.setColor(Color.BLACK);
                         }
                         break;
                     case "EdmondsKarp":
                         if (visitedVertices != null && visitedVertices.contains(from) && visitedVertices.contains(to)) {
-                            g2.setColor(Color.ORANGE); // Edmonds-Karp: оранжевый
+                            g2.setColor(Color.ORANGE);
                         } else {
                             g2.setColor(Color.BLACK);
                         }
@@ -298,7 +263,7 @@ public class GraphEditPanel extends JPanel {
                             int fromOrder = topologicalOrder.indexOf(from);
                             int toOrder = topologicalOrder.indexOf(to);
                             if (fromOrder < toOrder) {
-                                g2.setColor(Color.BLUE); // TopologicalSort: синий
+                                g2.setColor(Color.BLUE);
                             } else {
                                 g2.setColor(Color.BLACK);
                             }
@@ -307,7 +272,6 @@ public class GraphEditPanel extends JPanel {
                         }
                         break;
                     case "ARRANGE":
-                        // Можно добавить цветовое выделение для различных укладок, если необходимо
                         g2.setColor(Color.BLACK);
                         break;
                     default:
@@ -315,7 +279,7 @@ public class GraphEditPanel extends JPanel {
                 }
             } else if (lastAlgorithm.equals("MST") && mstEdges != null) {
                 if (mstEdges.contains(e)) {
-                    g2.setColor(Color.GREEN); // MST: зелёный
+                    g2.setColor(Color.GREEN);
                 } else {
                     g2.setColor(Color.LIGHT_GRAY);
                 }
@@ -325,7 +289,6 @@ public class GraphEditPanel extends JPanel {
 
             g2.drawLine(p1.x, p1.y, p2.x, p2.y);
 
-            // Если граф ориентированный, рисуем стрелку
             if (graph instanceof model.graphs.DirectedGraph) {
                 drawArrowHead(g2, p1, p2);
             }
@@ -346,15 +309,8 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Рисует стрелку для ориентированного ребра.
-     *
-     * @param g2   Графический контекст.
-     * @param from Начальная точка.
-     * @param to   Конечная точка.
-     */
     private void drawArrowHead(Graphics2D g2, Point from, Point to) {
-        int arrowSize = 10;
+        int arrowSize = 30;
         double angle = Math.atan2(to.y - from.y, to.x - from.x);
         int x1 = (int) (to.x - arrowSize * Math.cos(angle - Math.PI / 6));
         int y1 = (int) (to.y - arrowSize * Math.sin(angle - Math.PI / 6));
@@ -365,9 +321,6 @@ public class GraphEditPanel extends JPanel {
         g2.fillPolygon(new int[]{to.x, x1, x2}, new int[]{to.y, y1, y2}, 3);
     }
 
-    /**
-     * Добавление новой вершины.
-     */
     private void addVertex() {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         AddVertexDialog dialog = new AddVertexDialog(parentFrame);
@@ -380,9 +333,6 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Добавление нового ребра.
-     */
     private void addEdge() {
         if (graph.getVertices().size() < 2) {
             JOptionPane.showMessageDialog(this, "Для добавления ребра необходимо как минимум две вершины.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -401,9 +351,6 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Удаление вершины.
-     */
     private void deleteVertex() {
         if (graph.getVertices().isEmpty()) {
             JOptionPane.showMessageDialog(this, "В графе нет вершин для удаления.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -417,19 +364,17 @@ public class GraphEditPanel extends JPanel {
         Vertex selectedVertex = dialog.getSelectedVertex();
         if (selectedVertex != null) {
             graph.removeVertex(selectedVertex);
-            visitedVertices = null; // Сброс результатов алгоритма
-            shortestDistances = null; // Сброс результатов алгоритма Дейкстры
-            maxFlow = 0.0; // Сброс результата алгоритма Эдмондса-Карпа
-            topologicalOrder = null; // Сброс результата топологической сортировки
-            maxFlowLabel.setText("Максимальный поток: 0.0"); // Сброс метки
+            visitedVertices = null;
+            shortestDistances = null;
+            maxFlow = 0.0;
+            topologicalOrder = null;
+            maxFlowLabel.setText("Максимальный поток: 0.0");
             layoutVertices();
             repaint();
         }
     }
 
-    /**
-     * Удаление ребра.
-     */
+
     private void deleteEdge() {
         if (graph.getEdges().isEmpty()) {
             JOptionPane.showMessageDialog(this, "В графе нет рёбер для удаления.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -443,19 +388,16 @@ public class GraphEditPanel extends JPanel {
         Edge selectedEdge = dialog.getSelectedEdge();
         if (selectedEdge != null) {
             graph.removeEdge(selectedEdge);
-            visitedVertices = null; // Сброс результатов алгоритма
-            shortestDistances = null; // Сброс результатов алгоритма Дейкстры
-            maxFlow = 0.0; // Сброс результата алгоритма Эдмондса-Карпа
-            topologicalOrder = null; // Сброс результата топологической сортировки
-            maxFlowLabel.setText("Максимальный поток: 0.0"); // Сброс метки
+            visitedVertices = null;
+            shortestDistances = null;
+            maxFlow = 0.0;
+            topologicalOrder = null;
+            maxFlowLabel.setText("Максимальный поток: 0.0");
             layoutVertices();
             repaint();
         }
     }
 
-    /**
-     * Изменение веса ребра.
-     */
     private void changeEdgeWeight() {
         if (graph.getEdges().isEmpty()) {
             JOptionPane.showMessageDialog(this, "В графе нет рёбер для изменения веса.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -475,9 +417,6 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Сохранение графа в файл.
-     */
     private void saveGraph() {
         if (graph == null || graph.getVertices().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Граф пуст или не инициализирован.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -492,7 +431,7 @@ public class GraphEditPanel extends JPanel {
             java.io.File fileToSave = fileChooser.getSelectedFile();
             String filePath = fileToSave.getAbsolutePath();
 
-            // Убедимся, что файл имеет расширение .json
+
             if (!filePath.toLowerCase().endsWith(".json")) {
                 filePath += ".json";
             }
@@ -507,9 +446,6 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Запуск алгоритма DFS.
-     */
     private void runDFS() {
         if (graph == null || graph.getVertices().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Граф пуст или не инициализирован.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -519,22 +455,22 @@ public class GraphEditPanel extends JPanel {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         List<Vertex> vertexList = new ArrayList<>(graph.getVertices());
 
-        // Открываем диалог для выбора начальной вершины
+
         SelectStartVertexDialog dialog = new SelectStartVertexDialog(parentFrame, vertexList, "Запуск DFS");
         dialog.setVisible(true);
         Vertex startVertex = dialog.getSelectedVertex();
 
         if (startVertex != null) {
-            // Выполнение DFS
+
             visitedVertices = DFS.dfs(graph, startVertex);
             lastAlgorithm = "DFS";
-            shortestDistances = null; // Сброс результатов алгоритма Дейкстры
-            maxFlow = 0.0; // Сброс результата алгоритма Эдмондса-Карпа
-            topologicalOrder = null; // Сброс результата топологической сортировки
-            maxFlowLabel.setText("Максимальный поток: 0.0"); // Сброс метки
+            shortestDistances = null;
+            maxFlow = 0.0;
+            topologicalOrder = null;
+            maxFlowLabel.setText("Максимальный поток: 0.0");
             repaint();
 
-            // Отображение результата DFS
+
             JOptionPane.showMessageDialog(this,
                     "Алгоритм DFS завершён.\n" +
                             "Посещённые вершины:\n" + visitedVertices,
@@ -543,9 +479,6 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Запуск алгоритма BFS.
-     */
     private void runBFS() {
         if (graph == null || graph.getVertices().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Граф пуст или не инициализирован.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -555,22 +488,22 @@ public class GraphEditPanel extends JPanel {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         List<Vertex> vertexList = new ArrayList<>(graph.getVertices());
 
-        // Открываем диалог для выбора начальной вершины
+
         SelectStartVertexDialog dialog = new SelectStartVertexDialog(parentFrame, vertexList, "Запуск BFS");
         dialog.setVisible(true);
         Vertex startVertex = dialog.getSelectedVertex();
 
         if (startVertex != null) {
-            // Выполнение BFS
+
             visitedVertices = BFS.bfs(graph, startVertex);
             lastAlgorithm = "BFS";
-            shortestDistances = null; // Сброс результатов алгоритма Дейкстры
-            maxFlow = 0.0; // Сброс результата алгоритма Эдмондса-Карпа
-            topologicalOrder = null; // Сброс результата топологической сортировки
-            maxFlowLabel.setText("Максимальный поток: 0.0"); // Сброс метки
+            shortestDistances = null;
+            maxFlow = 0.0;
+            topologicalOrder = null;
+            maxFlowLabel.setText("Максимальный поток: 0.0");
             repaint();
 
-            // Отображение результата BFS
+
             JOptionPane.showMessageDialog(this,
                     "Алгоритм BFS завершён.\n" +
                             "Посещённые вершины:\n" + visitedVertices,
@@ -579,9 +512,6 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Запуск алгоритма Дейкстры.
-     */
     private void runDijkstra() {
         if (graph == null || graph.getVertices().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Граф пуст или не инициализирован.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -591,22 +521,22 @@ public class GraphEditPanel extends JPanel {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         List<Vertex> vertexList = new ArrayList<>(graph.getVertices());
 
-        // Открываем диалог для выбора начальной вершины
+
         SelectStartVertexDialog dialog = new SelectStartVertexDialog(parentFrame, vertexList, "Запуск Dijkstra");
         dialog.setVisible(true);
         Vertex startVertex = dialog.getSelectedVertex();
 
         if (startVertex != null) {
-            // Выполнение Дейкстры
+
             shortestDistances = Dijkstra.dijkstra(graph, startVertex);
             lastAlgorithm = "Dijkstra";
-            visitedVertices = null; // Сброс результатов DFS и BFS
-            maxFlow = 0.0; // Сброс результата алгоритма Эдмондса-Карпа
-            topologicalOrder = null; // Сброс результата топологической сортировки
-            maxFlowLabel.setText("Максимальный поток: 0.0"); // Сброс метки
+            visitedVertices = null;
+            maxFlow = 0.0;
+            topologicalOrder = null;
+            maxFlowLabel.setText("Максимальный поток: 0.0");
             repaint();
 
-            // Отображение результата Дейкстры
+
             StringBuilder resultMessage = new StringBuilder("Алгоритм Dijkstra завершён.\n");
             for (Map.Entry<Vertex, Double> entry : shortestDistances.entrySet()) {
                 String distanceStr = (entry.getValue() == Double.POSITIVE_INFINITY) ? "∞" : String.valueOf(entry.getValue());
@@ -620,9 +550,6 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Запуск алгоритма Эдмондса-Карпа.
-     */
     private void runEdmondsKarp() {
         if (graph == null || graph.getVertices().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Граф пуст или не инициализирован.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -632,31 +559,31 @@ public class GraphEditPanel extends JPanel {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         List<Vertex> vertexList = new ArrayList<>(graph.getVertices());
 
-        // Открываем диалог для выбора исходной и конечной вершин
+
         SelectSourceSinkVertexDialog dialog = new SelectSourceSinkVertexDialog(parentFrame, vertexList);
         dialog.setVisible(true);
         Vertex source = dialog.getSelectedSource();
         Vertex sink = dialog.getSelectedSink();
 
         if (source != null && sink != null) {
-            // Проверка, что граф ориентированный, так как алгоритм Эдмондса-Карпа применим к направленным графам
+
             if (!(graph instanceof model.graphs.DirectedGraph)) {
                 JOptionPane.showMessageDialog(this, "Алгоритм Эдмондса-Карпа применим только к ориентированным графам.", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Выполнение алгоритма Эдмондса-Карпа
+
             maxFlow = EdmondsKarp.edmondsKarp(graph, source, sink);
             lastAlgorithm = "EdmondsKarp";
-            visitedVertices = null; // Сброс результатов других алгоритмов
-            shortestDistances = null; // Сброс результатов алгоритма Дейкстры
-            topologicalOrder = null; // Сброс результата топологической сортировки
+            visitedVertices = null;
+            shortestDistances = null;
+            topologicalOrder = null;
             repaint();
 
-            // Обновление метки максимального потока
+
             maxFlowLabel.setText("Максимальный поток: " + maxFlow);
 
-            // Отображение результата алгоритма Эдмондса-Карпа
+
             JOptionPane.showMessageDialog(this,
                     "Алгоритм Эдмондса-Карпа завершён.\n" +
                             "Максимальный поток: " + maxFlow,
@@ -665,50 +592,45 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Запуск алгоритма топологической сортировки.
-     */
     private void runTopologicalSort() {
         if (graph == null || graph.getVertices().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Граф пуст или не инициализирован.", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Проверка, что граф ориентированный
+
         if (!(graph instanceof model.graphs.DirectedGraph)) {
             JOptionPane.showMessageDialog(this, "Топологическая сортировка применима только к ориентированным графам.", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            // Выполнение топологической сортировки
+
             topologicalOrder = TopologicalSort.topologicalSort(graph);
             lastAlgorithm = "TopologicalSort";
-            visitedVertices = null; // Сброс результатов других алгоритмов
-            shortestDistances = null; // Сброс результатов алгоритма Дейкстры
-            maxFlow = 0.0; // Сброс результата алгоритма Эдмондса-Карпа
-            maxFlowLabel.setText("Максимальный поток: 0.0"); // Сброс метки
+            visitedVertices = null;
+            shortestDistances = null;
+            maxFlow = 0.0;
+            maxFlowLabel.setText("Максимальный поток: 0.0");
             repaint();
 
-            // Отображение результата топологической сортировки
+
             TopologicalSortDialog sortDialog = new TopologicalSortDialog((JFrame) SwingUtilities.getWindowAncestor(this), topologicalOrder);
             sortDialog.setVisible(true);
         } catch (IllegalStateException ex) {
-            // Если граф содержит цикл
+
             JOptionPane.showMessageDialog(this, "Граф содержит цикл! Топологическая сортировка невозможна.", "Ошибка", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    /**
-     * Укладка графа различными способами.
-     */
+
     private void arrangeGraph() {
         if (graph == null || graph.getVertices().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Граф пуст или не инициализирован.", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Открываем диалог для выбора типа укладки
+
         ArrangeGraphDialog dialog = new ArrangeGraphDialog((JFrame) SwingUtilities.getWindowAncestor(this));
         dialog.setVisible(true);
         String selectedLayout = dialog.getSelectedLayout();
@@ -734,12 +656,9 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Укладка графа по круговой схеме.
-     */
     private void arrangeCircular() {
         int width = getWidth();
-        int height = getHeight() - toolPanel.getHeight(); // Учёт высоты панели инструментов
+        int height = getHeight() - toolPanel.getHeight();
         int centerX = width / 2;
         int centerY = height / 2 + toolPanel.getHeight();
         int radius = Math.min(width, height) / 3;
@@ -757,9 +676,6 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Укладка графа по топологической сортировке.
-     */
     private void arrangeTopological() {
         if (!(graph instanceof model.graphs.DirectedGraph)) {
             JOptionPane.showMessageDialog(this, "Топологическая укладка применима только к ориентированным графам.", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -774,7 +690,7 @@ public class GraphEditPanel extends JPanel {
         int width = getWidth();
         int height = getHeight() - toolPanel.getHeight();
         int centerX = width / 2;
-        int topMargin = 50;
+        int topMargin = 500;
         int verticalSpacing = (height - 2 * topMargin) / topologicalOrder.size();
 
         vertexPositions.clear();
@@ -787,19 +703,17 @@ public class GraphEditPanel extends JPanel {
         }
     }
 
-    /**
-     * Укладка графа по минимальному остовному дереву.
-     */
+
     private void arrangeMST() {
-        // Получаем MST с использованием алгоритма Краскала
+
         Set<Edge> mstEdges = MinimumSpanningTree.kruskalMST(graph);
         if (mstEdges.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Минимальное остовное дерево не может быть построено.", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Создаём подграф MST
-        Graph mstGraph = new model.graphs.UndirectedGraph(); // Минимальное остовное дерево — неориентированное
+
+        Graph mstGraph = new model.graphs.UndirectedGraph();
         for (Edge edge : mstEdges) {
             mstGraph.addEdge(edge);
         }
@@ -807,28 +721,23 @@ public class GraphEditPanel extends JPanel {
             mstGraph.addVertex(v);
         }
 
-        // Определяем корень дерева (можно выбрать произвольно, например, первую вершину)
+
         Vertex root = new ArrayList<>(mstGraph.getVertices()).get(0);
 
-        // Расставляем вершины в виде дерева
+
         layoutTree(root, mstGraph);
     }
 
-    /**
-     * Расставляет вершины в виде дерева с заданным корнем.
-     *
-     * @param root     Корневая вершина.
-     * @param mstGraph Граф, представляющий MST.
-     */
+
     private void layoutTree(Vertex root, Graph mstGraph) {
         int width = getWidth();
         int height = getHeight() - toolPanel.getHeight();
         int centerX = width / 2;
-        int topMargin = 50;
-        int verticalSpacing = 80;
+        int topMargin = 500;
+        int verticalSpacing = (height - 2 * topMargin) / mstGraph.getSizeVertex();
         vertexPositions.clear();
 
-        // Используем BFS для определения уровней дерева
+
         Map<Vertex, Integer> levels = new HashMap<>();
         Queue<Vertex> queue = new LinkedList<>();
         queue.add(root);
@@ -855,7 +764,7 @@ public class GraphEditPanel extends JPanel {
             }
         }
 
-        // Группируем вершины по уровням
+
         Map<Integer, List<Vertex>> levelMap = new HashMap<>();
         int maxLevel = 0;
         for (Map.Entry<Vertex, Integer> entry : levels.entrySet()) {
@@ -864,7 +773,7 @@ public class GraphEditPanel extends JPanel {
             levelMap.computeIfAbsent(level, k -> new ArrayList<>()).add(entry.getKey());
         }
 
-        // Расставляем вершины
+
         for (int level = 0; level <= maxLevel; level++) {
             List<Vertex> verticesAtLevel = levelMap.get(level);
             if (verticesAtLevel == null) continue;

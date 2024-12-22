@@ -4,9 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-/**
- * Диалоговое окно для выбора типа укладки графа.
- */
+
 public class ArrangeGraphDialog extends JDialog {
     private JRadioButton circularLayoutRadio;
     private JRadioButton topologicalLayoutRadio;
@@ -19,7 +17,6 @@ public class ArrangeGraphDialog extends JDialog {
         super(parent, "Выберите тип укладки графа", true);
         setLayout(new BorderLayout());
 
-        // Панель с радиокнопками
         JPanel radioPanel = new JPanel(new GridLayout(3, 1));
         circularLayoutRadio = new JRadioButton("Круговая укладка");
         topologicalLayoutRadio = new JRadioButton("Топологическая укладка");
@@ -28,7 +25,7 @@ public class ArrangeGraphDialog extends JDialog {
         group.add(circularLayoutRadio);
         group.add(topologicalLayoutRadio);
         group.add(mstLayoutRadio);
-        circularLayoutRadio.setSelected(true); // По умолчанию выбран круговой режим
+        circularLayoutRadio.setSelected(true);
 
         radioPanel.add(circularLayoutRadio);
         radioPanel.add(topologicalLayoutRadio);
@@ -37,7 +34,6 @@ public class ArrangeGraphDialog extends JDialog {
 
         add(radioPanel, BorderLayout.CENTER);
 
-        // Панель кнопок
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         arrangeButton = new JButton("Укладка");
         cancelButton = new JButton("Отмена");
@@ -45,7 +41,6 @@ public class ArrangeGraphDialog extends JDialog {
         buttonPanel.add(cancelButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Обработчики кнопок
         arrangeButton.addActionListener(e -> {
             if (circularLayoutRadio.isSelected()) {
                 selectedLayout = "CIRCULAR";
@@ -66,11 +61,6 @@ public class ArrangeGraphDialog extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    /**
-     * Возвращает выбранный тип укладки или null, если операция отменена.
-     *
-     * @return Тип укладки ("CIRCULAR", "TOPOLOGICAL", "MST") или null.
-     */
     public String getSelectedLayout() {
         return selectedLayout;
     }

@@ -6,9 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Диалоговое окно для выбора исходной и конечной вершин для алгоритма Эдмондса-Карпа.
- */
+
 public class SelectSourceSinkVertexDialog extends JDialog {
     private JComboBox<Vertex> sourceComboBox;
     private JComboBox<Vertex> sinkComboBox;
@@ -21,7 +19,6 @@ public class SelectSourceSinkVertexDialog extends JDialog {
         super(parent, "Выберите исходную и конечную вершины для Edmonds-Karp", true);
         setLayout(new BorderLayout());
 
-        // Панель выбора вершин
         JPanel inputPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -35,7 +32,6 @@ public class SelectSourceSinkVertexDialog extends JDialog {
 
         add(inputPanel, BorderLayout.CENTER);
 
-        // Панель кнопок
         JPanel buttonPanel = new JPanel(new FlowLayout());
         selectButton = new JButton("Выбрать");
         cancelButton = new JButton("Отмена");
@@ -43,7 +39,6 @@ public class SelectSourceSinkVertexDialog extends JDialog {
         buttonPanel.add(cancelButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Обработчики кнопок
         selectButton.addActionListener(e -> {
             selectedSource = (Vertex) sourceComboBox.getSelectedItem();
             selectedSink = (Vertex) sinkComboBox.getSelectedItem();

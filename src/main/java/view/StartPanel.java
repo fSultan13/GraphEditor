@@ -4,12 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import io.GraphReader;
 import model.Graph;
 
-/**
- * Стартовая панель с кнопками "Новый граф" и "Загрузить граф".
- */
+
 public class StartPanel extends JPanel {
     private JButton newGraphButton;
     private JButton loadGraphButton;
@@ -27,7 +26,6 @@ public class StartPanel extends JPanel {
         newGraphButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Открываем диалог для выбора типа графа
                 String[] options = {"Ориентированный", "Неориентированный"};
                 int choice = JOptionPane.showOptionDialog(
                         StartPanel.this,
@@ -41,10 +39,8 @@ public class StartPanel extends JPanel {
                 );
 
                 if (choice == 0) {
-                    // Ориентированный граф
                     mainFrame.showGraphEditPanel(new model.graphs.DirectedGraph());
                 } else if (choice == 1) {
-                    // Неориентированный граф
                     mainFrame.showGraphEditPanel(new model.graphs.UndirectedGraph());
                 }
             }

@@ -5,9 +5,7 @@ import model.Vertex;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Диалоговое окно для добавления новой вершины.
- */
+
 public class AddVertexDialog extends JDialog {
     private JTextField labelField;
     private JButton addButton;
@@ -18,14 +16,12 @@ public class AddVertexDialog extends JDialog {
         super(parent, "Добавить вершину", true);
         setLayout(new BorderLayout());
 
-        // Поле ввода метки
         JPanel inputPanel = new JPanel(new FlowLayout());
         inputPanel.add(new JLabel("Метка вершины:"));
         labelField = new JTextField(15);
         inputPanel.add(labelField);
         add(inputPanel, BorderLayout.CENTER);
 
-        // Кнопки
         JPanel buttonPanel = new JPanel(new FlowLayout());
         addButton = new JButton("Добавить");
         cancelButton = new JButton("Отмена");
@@ -33,7 +29,6 @@ public class AddVertexDialog extends JDialog {
         buttonPanel.add(cancelButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Обработчики кнопок
         addButton.addActionListener(e -> {
             String label = labelField.getText().trim();
             if (!label.isEmpty()) {
@@ -53,11 +48,6 @@ public class AddVertexDialog extends JDialog {
         setLocationRelativeTo(parent);
     }
 
-    /**
-     * Возвращает созданную вершину или null, если добавление отменено.
-     *
-     * @return Вершина или null.
-     */
     public Vertex getVertex() {
         return vertex;
     }
